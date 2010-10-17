@@ -20,4 +20,5 @@ group :development, :test do
   gem "spork", ">= 0.9.0.rc2"
   gem "rest-client", ">= 1.6.1"
   gem "fakeweb", ">= 1.3.0"
+  gem "remarkable_activerecord", ">= 4.0.0.alpha4"
 end
