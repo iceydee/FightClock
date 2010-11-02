@@ -8,15 +8,14 @@ TKObject.subClass("FightClock", {
     this.addProperty("direction", "integer", {
       defaultValue: 0
     });
-    this.addProperty("time", "integer", {
-      defaultValue: 0
+    this.addProperty("time", "float", {
+      defaultValue: 0.00
     });
-    this.addProperty("lastSync", "integer", {
-      defaultValue: 0
+    this.addProperty("lastSync", "float", {
+      defaultValue: 0.00
     });
     
-    // Sync every 3 seconds
-    this.syncDelay = 3;
+    this.syncDelay = 3.00;
   },
   
   setDirection: function(value) {
@@ -65,7 +64,7 @@ TKObject.subClass("FightClock", {
     if (! Object.isUndefined(this.timer)) {
       new Ajax.Request("/api/direction.json", {
         method: "POST",
-        parameters: { "time":FightClock.getTime(), "direction":FightClock.getDirection() },
+        parameters: { "time":Math.round(FightClock.getTime()), "direction":FightClock.getDirection() },
         onSuccess: function(transport) {
           TKTrace.log(transport.responseJSON);
         }
@@ -111,11 +110,11 @@ TKObject.subClass("FightClock", {
   updateTime: function() {
     switch(this.getDirection()) {
       case 1:
-        this.setTime(this.getTime() + 1);
+        this.setTime(this.getTime() + 0.1);
         break;
         
       case -1:
-        this.setTime(this.getTime() - 1);
+        this.setTime(this.getTime() - 0.1);
         break;
         
       default:
@@ -124,7 +123,7 @@ TKObject.subClass("FightClock", {
     }
     
     var sign = "";
-    var remain = this.getTime();
+    var remain = Math.round(this.getTime());
     if (remain < 0) {
       sign = "-";
       remain = Math.abs(remain);
@@ -151,7 +150,7 @@ TKObject.subClass("FightClock", {
       this.sync();
     }
     
-    this.setLastSync(this.getLastSync() + 1);
+    this.setLastSync(this.getLastSync() + 0.1);
   },
   
   sync: function() {
@@ -162,9 +161,9 @@ TKObject.subClass("FightClock", {
         this.setLastSync(0);
         
         var obj = transport.responseJSON;
-        FightClock.setTime(obj.time);
-        FightClock.direction = obj.direction;
-        FightClock.updateButtonState();
+        this.setTime(obj.time);
+        this.direction = obj.direction;
+        this.updateButtonState();
       }.bind(this)
     });
   },
@@ -179,7 +178,7 @@ TKObject.subClass("FightClock", {
     };
     
     FightClock.updateTime();
-    this.timer = setInterval(FightClock.updateTime.bind(this), 1000);
+    this.timer = setInterval(FightClock.updateTime.bind(this), 100);
     
     this.sync();
   }
