@@ -14,6 +14,9 @@ TKObject.subClass("FightClock", {
     this.addProperty("lastSync", "integer", {
       defaultValue: 0
     });
+    
+    // Sync every 3 seconds
+    this.syncDelay = 3;
   },
   
   setDirection: function(value) {
@@ -144,8 +147,7 @@ TKObject.subClass("FightClock", {
     
     $('clock').update(sign+hours+":"+minutes+":"+seconds);
     
-    // Sync every 10 seconds
-    if (this.getLastSync() >= 10) {
+    if (this.getLastSync() >= this.syncDelay) {
       this.sync();
     }
     
