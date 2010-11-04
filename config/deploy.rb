@@ -1,5 +1,5 @@
 set :application, "FightClock"
-set :domain, "kangerlussuaq.homelinux.com"
+set :domain, "kangerlussuaq.homelinux.org"
 set :repository, "git@github.com:iceydee/FightClock.git"
 set :use_sudo, false
 set :deploy_to, "/var/www/fightclock.eskipol.com"
